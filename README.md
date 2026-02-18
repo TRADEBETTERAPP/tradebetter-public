@@ -22,8 +22,6 @@ Welcome to the public issue tracker for **TradeBetter**, the quantitative tradin
 
 1. **You open an issue** using one of the templates above.
 2. **The team triages it** and applies a label (see below).
-3. **Accepted issues** are linked to internal pull requests in our private repositories.
-4. **When the fix ships**, the internal PR references this issue (e.g. `Closes TRADEBETTERAPP/tradebetter-public#42`), and the issue is **automatically closed**.
 
 You'll see a notification when your issue is resolved.
 
@@ -59,50 +57,6 @@ You'll see a notification when your issue is resolved.
 | Label | Color | Meaning |
 |-------|-------|---------|
 | `metrics` | ⚪ Grey | Auto-generated monthly issue metrics report |
-
----
-
-## Automation
-
-This repository uses GitHub Actions to manage the full issue lifecycle automatically:
-
-| Workflow | What It Does |
-|----------|-------------|
-| **Auto-label** | Applies `bug`/`feature`/`triage` labels based on issue template type |
-| **Auto-comment** | Posts a category-specific welcome comment with links to docs |
-| **Label actions** | When team applies `shipped`/`wontfix`/`duplicate`/`accepted`/`in-progress`, auto-comments, auto-closes, or auto-locks as appropriate |
-| **Stale issues** | Marks issues with no activity for 30 days as `stale`; auto-closes after 14 more days. Issues labeled `accepted`/`in-progress`/`shipped` are exempt |
-| **Lock threads** | Locks closed issues after 14 days of inactivity to reduce noise |
-| **Issue metrics** | Generates a monthly report (time-to-first-response, time-to-close, label durations) |
-| **Slash commands** | Supports `/assign` (self-assign) and `/priority critical\|high\|medium\|low` (team-only) in issue comments |
-| **First interaction** | Welcomes first-time contributors with tips for getting faster responses |
-
-### Slash Commands
-
-Anyone can use these commands in issue comments:
-
-| Command | Who | Effect |
-|---------|-----|--------|
-| `/assign` | Anyone | Self-assign to the issue |
-| `/unassign` | Anyone | Remove yourself from the issue |
-| `/priority critical` | Org members only | Set priority label |
-| `/priority high` | Org members only | Set priority label |
-| `/priority medium` | Org members only | Set priority label |
-| `/priority low` | Org members only | Set priority label |
-
----
-
-## Cross-Repo Linking
-
-Internal pull requests in private repositories can reference public issues:
-
-```
-Closes TRADEBETTERAPP/tradebetter-public#42
-```
-
-When the PR merges, the referenced issue is automatically closed by GitHub.
-
----
 
 ## Before You Post
 
