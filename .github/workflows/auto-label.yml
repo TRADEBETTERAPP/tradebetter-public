@@ -1,0 +1,43 @@
+name: Auto-label issues
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply template-based labels
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const issue = context.payload.issue;
+            const title = issue.title || '';
+            const body = issue.body || '';
+            const labels = [];
+
+            // Detect template type from title prefix
+            if (title.startsWith('[Bug]')) {
+              labels.push('bug', 'triage');
+            } else if (title.startsWith('[Feature]')) {
+              labels.push('feature', 'triage');
+            } else if (title.startsWith('[Help]')) {
+              labels.push('triage');
+            } else {
+              // Fallback: label as triage if no template prefix detected
+              labels.push('triage');
+            }
+
+            if (labels.length > 0) {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                labels: labels,
+              });
+            }
