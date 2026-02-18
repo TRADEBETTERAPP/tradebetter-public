@@ -6,10 +6,6 @@
 
 If you discover a security vulnerability in TradeBetter, please report it privately.
 
-### Contact
-
-**Email:** [security@tradebetter.app](mailto:security@tradebetter.app)
-
 ### What to Include
 
 - Description of the vulnerability
