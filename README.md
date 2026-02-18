@@ -55,7 +55,7 @@ You'll see a notification when your issue is resolved.
 
 ## Links
 
-- **App:** [https://tradebetter.xyz](https://tradebetter.xyz)
+- **App:** [https://sndbx.tradebetter.app](https://sndbx.tradebetter.app)
 - **Support & FAQ:** [.github/SUPPORT.md](.github/SUPPORT.md)
 - **Security Policy:** [SECURITY.md](SECURITY.md)
 - **Contributing:** [CONTRIBUTING.md](CONTRIBUTING.md)

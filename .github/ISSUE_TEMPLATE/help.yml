@@ -46,7 +46,7 @@ body:
       placeholder: |
         - Checked the SUPPORT.md FAQ section on deposits
         - Searched existing issues for "deposit not showing"
-        - Read the deposit guide at tradebetter.xyz/docs
+        - Read the deposit guide at sndbx.tradebetter.app/docs
     validations:
       required: true
 

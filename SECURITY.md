@@ -8,7 +8,7 @@ If you discover a security vulnerability in TradeBetter, please report it privat
 
 ### Contact
 
-**Email:** [security@tradebetter.xyz](mailto:security@tradebetter.xyz)
+**Email:** [security@tradebetter.app](mailto:security@tradebetter.app)
 
 ### What to Include
 
@@ -27,7 +27,7 @@ If you discover a security vulnerability in TradeBetter, please report it privat
 
 This policy covers:
 
-- The TradeBetter web application ([https://tradebetter.xyz](https://tradebetter.xyz))
+- The TradeBetter web application ([https://sndbx.tradebetter.app](https://sndbx.tradebetter.app))
 - TradeBetter backend APIs
 - Smart contract interactions initiated by TradeBetter
 - Authentication and wallet signing flows

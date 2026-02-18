@@ -8,7 +8,7 @@ If you need help with TradeBetter, start here before opening an issue.
 
 | Resource | URL |
 |----------|-----|
-| TradeBetter App | [https://tradebetter.xyz](https://tradebetter.xyz) |
+| TradeBetter App | [https://sndbx.tradebetter.app](https://sndbx.tradebetter.app) |
 | Report a Bug | [Open Bug Report](https://github.com/TRADEBETTERAPP/tradebetter-public/issues/new?template=bug_report.yml) |
 | Request a Feature | [Open Feature Request](https://github.com/TRADEBETTERAPP/tradebetter-public/issues/new?template=feature_request.yml) |
 | Ask a Question | [Open Help Request](https://github.com/TRADEBETTERAPP/tradebetter-public/issues/new?template=help.yml) |
@@ -24,7 +24,7 @@ If you need help with TradeBetter, start here before opening an issue.
 A: TradeBetter uses wallet-based authentication via Privy. Connect your wallet (MetaMask, Phantom, Coinbase Wallet, or use the Privy embedded wallet) and sign the authentication message. A $BETTER token balance may be required depending on the current gate tier.
 
 **Q: I connected my wallet but got a "gate" error. What does that mean?**
-A: TradeBetter uses a token gate that requires a minimum $BETTER token balance. Check the current tier requirements at [https://tradebetter.xyz](https://tradebetter.xyz). Your token balance is re-checked every 10 minutes.
+A: TradeBetter uses a token gate that requires a minimum $BETTER token balance. Check the current tier requirements at [https://sndbx.tradebetter.app](https://sndbx.tradebetter.app). Your token balance is re-checked every 10 minutes.
 
 **Q: My session expired. How do I refresh?**
 A: Sessions refresh automatically every 10 minutes. If you're logged out, simply reconnect your wallet and sign in again.
