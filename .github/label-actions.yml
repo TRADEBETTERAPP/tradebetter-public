@@ -1,0 +1,71 @@
+# Configuration for dessant/label-actions
+# Drives the entire issue lifecycle based on label transitions.
+# See: https://github.com/dessant/label-actions
+
+# --- SHIPPED: close + notify + lock after comment ---
+shipped:
+  issues:
+    comment: >
+      This issue has been resolved and the fix is now deployed. :rocket:
+
+      If you still experience the problem, please open a new issue with updated details.
+      Thank you for helping improve TradeBetter!
+    close: true
+    close-reason: 'completed'
+    lock: true
+    lock-reason: 'resolved'
+
+# --- WONTFIX: close with explanation ---
+wontfix:
+  issues:
+    comment: >
+      After review, the team has decided not to address this issue at this time.
+      The rationale is explained in the comments above.
+
+      If you believe this decision should be reconsidered, please open a new issue
+      with additional context or a revised proposal.
+    close: true
+    close-reason: 'not planned'
+
+# --- DUPLICATE: close with guidance ---
+duplicate:
+  issues:
+    comment: >
+      This issue has been identified as a duplicate. The original issue is linked
+      in the comments above.
+
+      Please add any additional context to the original issue and use :+1: reactions
+      to signal priority. Thank you!
+    close: true
+    close-reason: 'not planned'
+
+# --- ACCEPTED: remove triage label, acknowledge ---
+accepted:
+  issues:
+    comment: >
+      This issue has been reviewed and accepted. :white_check_mark:
+      It has been added to the team's backlog and will be scheduled for work.
+      You'll be notified when progress begins.
+    unlabel: 'triage'
+
+# --- IN-PROGRESS: notify the reporter ---
+in-progress:
+  issues:
+    comment: >
+      Work has started on this issue. :hammer_and_wrench:
+      You'll be notified when the fix or feature ships.
+    unlabel:
+      - 'triage'
+      - 'accepted'
+
+# --- Removing SHIPPED (edge case: premature closure) ---
+-shipped:
+  issues:
+    reopen: true
+    unlock: true
+
+# --- Removing WONTFIX (reconsidered) ---
+-wontfix:
+  issues:
+    reopen: true
+    label: 'triage'

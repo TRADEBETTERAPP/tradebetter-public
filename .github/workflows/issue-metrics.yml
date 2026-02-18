@@ -1,0 +1,33 @@
+name: Monthly issue metrics
+
+on:
+  schedule:
+    - cron: '0 8 1 * *'  # 1st of every month at 08:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  issues: write
+
+jobs:
+  metrics:
+    name: Gather issue metrics
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run issue-metrics
+        uses: github/issue-metrics@v3
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SEARCH_QUERY: 'repo:TRADEBETTERAPP/tradebetter-public is:issue created:>=${{ env.REPORT_START }}'
+          HIDE_AUTHOR: true
+          HIDE_ITEMS_CLOSED_COUNT: false
+          LABELS_TO_MEASURE: 'triage,accepted,in-progress'
+
+      - name: Create metrics report issue
+        uses: peter-evans/create-issue-from-file@v5
+        with:
+          title: 'Issue Metrics Report — ${{ github.run_id }}'
+          content-filepath: ./issue_metrics.md
+          labels: 'metrics'
+
+    env:
+      REPORT_START: ${{ github.event.schedule && format('{0}-{1}-01', github.run_number, github.run_number) || '2026-01-01' }}

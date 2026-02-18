@@ -1,0 +1,27 @@
+name: First interaction welcome
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  welcome:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/first-interaction@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          issue-message: >
+            Welcome to the TradeBetter issue tracker! :wave:
+            This is your first issue here — thanks for taking the time to report it.
+
+            A few tips to help us help you faster:
+
+            - Make sure all template fields are filled out
+            - Include screenshots or logs when possible (redact sensitive data)
+            - Use :+1: reactions on existing issues instead of "+1" comments
+
+            The team will triage this shortly. See the [Issue Guide](https://github.com/TRADEBETTERAPP/tradebetter-public/blob/main/.github/ISSUE_GUIDE.md) for more tips.
