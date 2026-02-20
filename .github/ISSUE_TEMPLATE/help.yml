@@ -1,59 +1,13 @@
 name: Help / Question
-description: Ask for help or get answers about using TradeBetter
+description: Ask for help with TradeBetter
 title: "[Help]: "
 labels: ["triage"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Need help with TradeBetter? Fill out the sections below and the team will get back to you.
-
-        Before posting, check:
-        - [Support & FAQ](https://github.com/TRADEBETTERAPP/tradebetter-public/blob/main/.github/SUPPORT.md)
-        - [Existing issues](https://github.com/TRADEBETTERAPP/tradebetter-public/issues)
-
   - type: textarea
-    id: goal
+    id: description
     attributes:
-      label: What are you trying to do?
-      description: Describe your goal or the task you're attempting.
-      placeholder: |
-        e.g. I'm trying to deposit USDC from my Coinbase wallet on Base into my
-        TradeBetter trading account so I can execute trades.
+      label: What do you need help with?
+      description: Describe your question or what you're stuck on. Include screenshots or links if relevant.
+      placeholder: "What are you trying to do?"
     validations:
       required: true
-
-  - type: textarea
-    id: tried
-    attributes:
-      label: What have you tried?
-      description: List the steps you've already taken and their results.
-      placeholder: |
-        1. Connected my Coinbase Wallet via WalletConnect
-        2. Opened the WALLET view
-        3. Clicked [DEPOSIT] and selected Base chain
-        4. Generated a deposit address
-        5. Sent 50 USDC to the address
-        6. After 10 minutes, the balance still shows 0
-    validations:
-      required: true
-
-  - type: textarea
-    id: docs
-    attributes:
-      label: Documentation Already Read
-      description: Which docs or resources have you already checked? Include links if possible.
-      placeholder: |
-        - Checked the SUPPORT.md FAQ section on deposits
-        - Searched existing issues for "deposit not showing"
-        - Read the deposit guide at sndbx.tradebetter.app/docs
-    validations:
-      required: true
-
-  - type: textarea
-    id: context
-    attributes:
-      label: Additional Context
-      description: Any other information — screenshots, transaction hashes, error messages, etc.
-    validations:
-      required: false

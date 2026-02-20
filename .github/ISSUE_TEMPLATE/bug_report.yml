@@ -1,110 +1,13 @@
 name: Bug Report
-description: Report a bug or unexpected behaviour in TradeBetter
+description: Report a bug or unexpected behaviour
 title: "[Bug]: "
 labels: ["bug", "triage"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        Thanks for taking the time to report a bug. Please fill out the sections below as completely as possible.
-
-        **Do not include** credentials, API keys, private keys, or seed phrases.
-
   - type: textarea
-    id: summary
+    id: description
     attributes:
-      label: Summary
-      description: A clear, one-sentence description of the bug.
-      placeholder: "e.g. Deposit modal shows 'undefined' for USDC balance on Base"
+      label: Describe the bug
+      description: Tell us what happened, what you expected, and any other details that might help. Screenshots welcome.
+      placeholder: "What went wrong? What were you doing when it happened?"
     validations:
       required: true
-
-  - type: textarea
-    id: steps
-    attributes:
-      label: Steps to Reproduce
-      description: Exact steps to trigger the bug. Be as specific as possible.
-      placeholder: |
-        1. Connect wallet via MetaMask
-        2. Navigate to WALLET view
-        3. Click [DEPOSIT]
-        4. Select Base chain
-        5. Observe balance field shows 'undefined'
-    validations:
-      required: true
-
-  - type: textarea
-    id: expected
-    attributes:
-      label: Expected Behaviour
-      description: What should have happened?
-      placeholder: "Balance field should display the user's USDC balance on Base."
-    validations:
-      required: true
-
-  - type: textarea
-    id: actual
-    attributes:
-      label: Actual Behaviour
-      description: What actually happened? Include exact error messages if any.
-      placeholder: "Balance field shows 'undefined'. No error in the UI."
-    validations:
-      required: true
-
-  - type: input
-    id: os
-    attributes:
-      label: Operating System
-      description: Your OS and version.
-      placeholder: "e.g. macOS 15.1, Windows 11, Ubuntu 24.04"
-    validations:
-      required: true
-
-  - type: input
-    id: browser
-    attributes:
-      label: Browser
-      description: Browser name and version.
-      placeholder: "e.g. Chrome 131, Firefox 133, Safari 18.2"
-    validations:
-      required: true
-
-  - type: dropdown
-    id: wallet
-    attributes:
-      label: Wallet Provider
-      description: Which wallet were you using?
-      options:
-        - Privy Embedded Wallet
-        - MetaMask
-        - Phantom
-        - Coinbase Wallet
-        - WalletConnect
-        - Other (specify in summary)
-    validations:
-      required: true
-
-  - type: dropdown
-    id: network
-    attributes:
-      label: Network
-      description: Which blockchain network were you interacting with?
-      options:
-        - Polygon
-        - Base
-        - Ethereum Mainnet
-        - Arbitrum
-        - Not applicable
-    validations:
-      required: true
-
-  - type: textarea
-    id: logs
-    attributes:
-      label: Logs / Screenshots
-      description: |
-        Attach screenshots, screen recordings, browser console logs, or network traces.
-        **Redact any sensitive data before uploading.**
-      placeholder: "Drag and drop files here or paste console output."
-    validations:
-      required: false

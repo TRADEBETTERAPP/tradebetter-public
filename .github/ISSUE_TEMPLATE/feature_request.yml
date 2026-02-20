@@ -1,65 +1,13 @@
 name: Feature Request
-description: Propose a new feature or improvement for TradeBetter
+description: Suggest a new feature or improvement
 title: "[Feature]: "
 labels: ["feature", "triage"]
 body:
-  - type: markdown
-    attributes:
-      value: |
-        We appreciate feature requests that are specific and well-reasoned. Please fill out the sections below.
-
   - type: textarea
-    id: problem
+    id: description
     attributes:
-      label: Problem Being Solved
-      description: What problem or pain point does this feature address? Be specific about your workflow.
-      placeholder: |
-        e.g. When I'm reviewing signals in the terminal, I can't quickly see which
-        signals are from wallets I've previously had success copying. I have to open
-        each signal's PERFORMANCE tab individually.
+      label: Describe the feature
+      description: What would you like to see? What problem does it solve?
+      placeholder: "What do you want and why?"
     validations:
       required: true
-
-  - type: textarea
-    id: solution
-    attributes:
-      label: Proposed Solution
-      description: Describe what you'd like to see. Include mockups, sketches, or references to other products if helpful.
-      placeholder: |
-        e.g. Add a small badge or indicator on SignalCardCompact showing whether the
-        source wallet has a positive copy-trade ROE in the user's history. Could be a
-        green/red dot next to the wallet label.
-    validations:
-      required: true
-
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives Considered
-      description: What other approaches could solve this problem? Why is your proposal better?
-      placeholder: |
-        e.g. I considered using the star/annotation feature to manually mark good wallets,
-        but that requires me to remember and maintain the list manually.
-    validations:
-      required: true
-
-  - type: dropdown
-    id: impact
-    attributes:
-      label: Impact / Priority
-      description: How important is this to your workflow?
-      options:
-        - Critical — I can't use the product effectively without this
-        - High — Significantly improves my workflow
-        - Medium — Nice to have, would save time
-        - Low — Minor convenience improvement
-    validations:
-      required: true
-
-  - type: textarea
-    id: context
-    attributes:
-      label: Additional Context
-      description: Any other context, screenshots, or examples that support this request.
-    validations:
-      required: false
