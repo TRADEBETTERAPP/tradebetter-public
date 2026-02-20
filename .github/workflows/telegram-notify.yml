@@ -1,0 +1,196 @@
+name: Telegram Community Notifications
+
+on:
+  issues:
+    types: [opened, closed, reopened, labeled, assigned]
+  issue_comment:
+    types: [created]
+  pull_request:
+    types: [opened, closed, reopened, ready_for_review]
+  pull_request_review:
+    types: [submitted]
+  release:
+    types: [published]
+  discussion:
+    types: [created]
+  milestone:
+    types: [created, closed]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build and send Telegram notification
+        uses: actions/github-script@v7
+        env:
+          BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        with:
+          script: |
+            const { BOT_TOKEN, CHAT_ID } = process.env;
+            if (!BOT_TOKEN || !CHAT_ID) {
+              core.warning('TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set');
+              return;
+            }
+
+            const event = context.eventName;
+            const action = context.payload.action;
+            const repo = context.payload.repository.full_name;
+            const actor = context.actor;
+            let msg = '';
+
+            function esc(s) {
+              if (!s) return '';
+              return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            }
+
+            function truncate(s, max = 300) {
+              if (!s) return '';
+              return s.length > max ? s.slice(0, max) + '…' : s;
+            }
+
+            // ── Issues ──
+            if (event === 'issues') {
+              const { number, title, html_url, labels, state_reason, body } = context.payload.issue;
+              const labelStr = labels.map(l => `[${esc(l.name)}]`).join(' ') || 'none';
+
+              switch (action) {
+                case 'opened':
+                  msg = `🆕 <b>New Issue #${number}</b>: ${esc(title)}\n\nLabels: ${labelStr}`;
+                  if (body) msg += `\n\n<blockquote>${esc(truncate(body))}</blockquote>`;
+                  break;
+                case 'closed':
+                  if (state_reason === 'completed') {
+                    msg = `✅ <b>Issue #${number} Resolved</b>: ${esc(title)}\n\nLabels: ${labelStr}`;
+                  } else {
+                    msg = `🚫 <b>Issue #${number} Closed (not planned)</b>: ${esc(title)}\n\nLabels: ${labelStr}`;
+                  }
+                  break;
+                case 'reopened':
+                  msg = `🔄 <b>Issue #${number} Reopened</b>: ${esc(title)}\n\nLabels: ${labelStr}`;
+                  break;
+                case 'labeled': {
+                  const newLabel = context.payload.label.name;
+                  msg = `🏷 <b>Label added to #${number}</b>: ${esc(title)}\n\nNew label: <b>${esc(newLabel)}</b>\nAll labels: ${labelStr}`;
+                  break;
+                }
+                case 'assigned': {
+                  const assignee = context.payload.assignee.login;
+                  msg = `👤 <b>Issue #${number} Assigned</b>: ${esc(title)}\n\nAssigned to: <b>${esc(assignee)}</b>`;
+                  break;
+                }
+              }
+              if (msg) msg += `\n\n<a href="${html_url}">View Issue</a>`;
+            }
+
+            // ── Issue Comments ──
+            if (event === 'issue_comment' && action === 'created') {
+              if (actor === 'github-actions[bot]' || actor === 'github-actions') {
+                core.info('Skipping bot comment notification');
+                return;
+              }
+              const { number, title } = context.payload.issue;
+              const { html_url, body } = context.payload.comment;
+              msg = `💬 <b>Comment on #${number}</b>: ${esc(title)}\n\n<blockquote>${esc(truncate(body, 400))}</blockquote>\n\n<a href="${html_url}">View Comment</a>`;
+            }
+
+            // ── Pull Requests ──
+            if (event === 'pull_request') {
+              const pr = context.payload.pull_request;
+              const { number, title, html_url } = pr;
+
+              switch (action) {
+                case 'opened':
+                  msg = `📝 <b>New PR #${number}</b>: ${esc(title)}\n\nBranch: <code>${esc(pr.head.ref)}</code> → <code>${esc(pr.base.ref)}</code>`;
+                  break;
+                case 'closed':
+                  if (pr.merged) {
+                    msg = `🎉 <b>PR #${number} Merged</b>: ${esc(title)}\n\nMerged into <code>${esc(pr.base.ref)}</code>`;
+                  } else {
+                    msg = `❌ <b>PR #${number} Closed</b>: ${esc(title)}\n\nClosed without merging`;
+                  }
+                  break;
+                case 'reopened':
+                  msg = `🔄 <b>PR #${number} Reopened</b>: ${esc(title)}`;
+                  break;
+                case 'ready_for_review':
+                  msg = `👀 <b>PR #${number} Ready for Review</b>: ${esc(title)}`;
+                  break;
+              }
+              if (msg) msg += `\n\n<a href="${html_url}">View PR</a>`;
+            }
+
+            // ── PR Reviews ──
+            if (event === 'pull_request_review' && action === 'submitted') {
+              const { number, title } = context.payload.pull_request;
+              const review = context.payload.review;
+
+              switch (review.state) {
+                case 'approved':
+                  msg = `✅ <b>PR #${number} Approved</b>: ${esc(title)}\n\nApproved by <b>${esc(actor)}</b>`;
+                  break;
+                case 'changes_requested':
+                  msg = `🔧 <b>Changes Requested on PR #${number}</b>: ${esc(title)}\n\nReviewer: <b>${esc(actor)}</b>`;
+                  break;
+                case 'commented':
+                  if (review.body) {
+                    msg = `💬 <b>Review on PR #${number}</b>: ${esc(title)}\n\n<blockquote>${esc(truncate(review.body))}</blockquote>`;
+                  }
+                  break;
+              }
+              if (msg) msg += `\n\n<a href="${review.html_url}">View Review</a>`;
+            }
+
+            // ── Releases ──
+            if (event === 'release' && action === 'published') {
+              const rel = context.payload.release;
+              msg = `🚀 <b>New Release: ${esc(rel.name || rel.tag_name)}</b> (${esc(rel.tag_name)})`;
+              if (rel.body) msg += `\n\n${esc(truncate(rel.body, 500))}`;
+              msg += `\n\n<a href="${rel.html_url}">View Release</a>`;
+            }
+
+            // ── Discussions ──
+            if (event === 'discussion' && action === 'created') {
+              const disc = context.payload.discussion;
+              msg = `🗣 <b>New Discussion</b>: ${esc(disc.title)}\n\nCategory: <b>${esc(disc.category.name)}</b>\n\n<a href="${disc.html_url}">View Discussion</a>`;
+            }
+
+            // ── Milestones ──
+            if (event === 'milestone') {
+              const ms = context.payload.milestone;
+              if (action === 'created') {
+                msg = `🎯 <b>New Milestone</b>: ${esc(ms.title)}\n\n<a href="${ms.html_url}">View Milestone</a>`;
+              } else if (action === 'closed') {
+                msg = `🏆 <b>Milestone Completed</b>: ${esc(ms.title)}\n\n<a href="${ms.html_url}">View Milestone</a>`;
+              }
+            }
+
+            // ── Send ──
+            if (!msg) {
+              core.info(`No notification for ${event}/${action}`);
+              return;
+            }
+
+            // Add footer
+            msg += `\n<code>${esc(repo)}</code> · ${esc(actor)}`;
+
+            // Telegram limit is 4096 chars
+            if (msg.length > 4000) msg = msg.slice(0, 3997) + '…';
+
+            const resp = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: msg,
+                parse_mode: 'HTML',
+                disable_web_page_preview: true,
+              }),
+            });
+
+            const data = await resp.json();
+            if (!data.ok) {
+              core.setFailed(`Telegram API error: ${JSON.stringify(data)}`);
+            } else {
+              core.info('Telegram notification sent');
+            }
