@@ -25,7 +25,6 @@ jobs:
             const commenter = context.payload.comment.user.login;
             const issue = context.payload.issue;
 
-            // /assign — self-assign
             if (comment.match(/^\/assign\s*$/m)) {
               try {
                 await github.rest.issues.addAssignees({
@@ -33,31 +32,16 @@ jobs:
                   issue_number: issue.number,
                   assignees: [commenter],
                 });
-                await github.rest.issues.createComment({
-                  ...context.repo,
-                  issue_number: issue.number,
-                  body: `@${commenter} has been assigned to this issue.`,
-                });
               } catch (err) {
-                await github.rest.issues.createComment({
-                  ...context.repo,
-                  issue_number: issue.number,
-                  body: `@${commenter} Could not assign — you may need to be an org member. The team will assign this manually.`,
-                });
+                core.warning(`Could not assign ${commenter}: ${err.message}`);
               }
             }
 
-            // /unassign — self-unassign
             if (comment.match(/^\/unassign\s*$/m)) {
               await github.rest.issues.removeAssignees({
                 ...context.repo,
                 issue_number: issue.number,
                 assignees: [commenter],
-              });
-              await github.rest.issues.createComment({
-                ...context.repo,
-                issue_number: issue.number,
-                body: `@${commenter} has been unassigned from this issue.`,
               });
             }
 
@@ -78,36 +62,22 @@ jobs:
             const issue = context.payload.issue;
             const commenter = context.payload.comment.user.login;
 
-            // Only org members can set priority
             try {
-              const membership = await github.rest.orgs.checkMembershipForUser({
+              await github.rest.orgs.checkMembershipForUser({
                 org: 'TRADEBETTERAPP',
                 username: commenter,
               });
             } catch {
-              await github.rest.issues.createComment({
-                ...context.repo,
-                issue_number: issue.number,
-                body: `@${commenter} Only TRADEBETTERAPP org members can set priority.`,
-              });
               return;
             }
 
             const match = comment.match(/^\/priority\s+(critical|high|medium|low)\s*$/m);
-            if (!match) {
-              await github.rest.issues.createComment({
-                ...context.repo,
-                issue_number: issue.number,
-                body: 'Usage: `/priority critical|high|medium|low`',
-              });
-              return;
-            }
+            if (!match) return;
 
             const level = match[1];
             const priorityLabels = ['priority:critical', 'priority:high', 'priority:medium', 'priority:low'];
             const targetLabel = `priority:${level}`;
 
-            // Remove existing priority labels
             for (const label of priorityLabels) {
               const existing = issue.labels.find(l => l.name === label);
               if (existing) {
@@ -119,15 +89,8 @@ jobs:
               }
             }
 
-            // Add new priority label
             await github.rest.issues.addLabels({
               ...context.repo,
               issue_number: issue.number,
               labels: [targetLabel],
-            });
-
-            await github.rest.issues.createComment({
-              ...context.repo,
-              issue_number: issue.number,
-              body: `Priority set to **${level}** by @${commenter}.`,
             });

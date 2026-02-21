@@ -2,8 +2,8 @@ name: Manage stale issues
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # Daily at 06:00 UTC
-  workflow_dispatch: {}   # Allow manual trigger
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
 
 permissions:
   issues: write
@@ -17,23 +17,11 @@ jobs:
           days-before-stale: 30
           days-before-close: 14
           stale-issue-label: 'stale'
-          stale-issue-message: >
-            This issue has been automatically marked as **stale** because it has
-            not had any activity in 30 days.
-
-            If this issue is still relevant, please leave a comment with an update
-            or additional context, and the stale label will be removed.
-
-            If no activity occurs within 14 days, this issue will be automatically closed.
-          close-issue-message: >
-            This issue has been automatically closed due to inactivity.
-
-            If the problem persists or the feature is still needed, please open a
-            new issue with updated details. Thank you for your contribution!
-          # Don't stale issues the team is actively working on
+          # No comment when marking stale -- label is sufficient
+          stale-issue-message: ''
+          # No comment when closing -- the close event speaks for itself
+          close-issue-message: ''
           exempt-issue-labels: 'accepted,in-progress,shipped'
-          # Don't touch PRs (this repo has none)
           days-before-pr-stale: -1
           days-before-pr-close: -1
-          # Process up to 50 issues per run
           operations-per-run: 50

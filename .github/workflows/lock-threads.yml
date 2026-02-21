@@ -2,7 +2,7 @@ name: Lock closed threads
 
 on:
   schedule:
-    - cron: '0 7 * * 1'  # Weekly, Monday 07:00 UTC
+    - cron: '0 7 * * 1'
   workflow_dispatch: {}
 
 permissions:
@@ -16,10 +16,6 @@ jobs:
         with:
           issue-inactive-days: 14
           issue-lock-reason: 'resolved'
-          issue-comment: >
-            This issue has been locked because it has been closed for more than 14 days.
-
-            If you are still experiencing this problem, please
-            [open a new issue](https://github.com/TRADEBETTERAPP/tradebetter-public/issues/new/choose)
-            with updated details and a reference to this one.
+          # No comment on lock -- reduces email noise
+          issue-comment: ''
           add-issue-labels: ''
